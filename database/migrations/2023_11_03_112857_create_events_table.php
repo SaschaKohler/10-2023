@@ -30,6 +30,8 @@ return new class extends Migration
                 $table->json('images')->nullable();
                 $table->foreignId('user_id')->nullable()->references('id')
                     ->on('users')->cascadeOnDelete();
+                $table->foreignId('author_id')->nullable()->references('id')
+                    ->on('users')->cascadeOnDelete();
                 $table->foreignId('calendar_id')->nullable()->constrained()->cascadeOnDelete();
                 $table->softDeletes();
                 $table->timestamps();

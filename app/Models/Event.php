@@ -83,6 +83,15 @@ class Event extends Model
         return $query->where('start', '<=', Carbon::parse($date));
     }
 
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'author_id');
+    }
+
+    public function editor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'editor_id');
+    }
 
     public function client(): BelongsTo
     {
@@ -96,15 +105,6 @@ class Event extends Model
             ->withPivot(['start_at', 'end_at', 'sum']);
 
     }
-    // public function author(): BelongsTo
-    // {
-    //     return $this->belongsTo(User::class, 'author_id');
-    // }
-
-    // public function editor(): BelongsTo
-    // {
-    //     return $this->belongsTo(User::class, 'editor_id');
-    // }
 
 
     // public function vehicles(): BelongsToMany

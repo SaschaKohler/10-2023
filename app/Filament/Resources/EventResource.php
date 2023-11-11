@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\EventResource\Pages;
 use App\Models\Calendar;
 use App\Models\Event;
+use App\Models\ZipCode;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -70,12 +71,12 @@ class EventResource extends Resource
                         Forms\Components\DateTimePicker::make('start')
                             ->label(__('filament::resources/event-resource.table.start'))
                             ->firstDayOfWeek(1)
-                            ->withoutSeconds()
+                            ->seconds(false)
                             ->required(),
                         Forms\Components\DateTimePicker::make('end')
                             ->label(__('filament::resources/event-resource.end'))
                             ->firstDayOfWeek(1)
-                            ->withoutSeconds()
+                            ->seconds(false)
                             ->required(),
                         Forms\Components\Toggle::make('allDay')->label('allDay')
                             ->label(__('filament::resources/event-resource.all_day')),
@@ -123,7 +124,25 @@ class EventResource extends Resource
                             )
                             ->required()
                             ->searchable()
-                            ->preload(),
+                            ->preload()
+                            ->createOptionForm(
+                                [
+                                Forms\Components\TextInput::make('name1')
+                                    ->label(__('filament::resources/event-resource.client_detail.name'))
+                                    ->required(),
+                                Forms\Components\TextInput::make('email')
+                                    ->label(__('filament::resources/event-resource.client_detail.email'))
+                                    ->required()
+                                    ->email(),
+                                Forms\Components\TextInput::make('phone1')
+                                    ->label(__('filament::resources/event-resource.client_detail.phone1'))
+                                    ->required()
+                                    ->tel(),
+                                Forms\Components\TextInput::make('address')
+                                    ->label(__('filament::resources/event-resource.client_detail.address'))
+                                    ->required()
+                                ]
+                            ),
                         Forms\Components\Card::make()->schema(
                             [
                             Forms\Components\Placeholder::make('Name')

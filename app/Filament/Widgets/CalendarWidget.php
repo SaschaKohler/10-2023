@@ -40,8 +40,8 @@ class CalendarWidget extends FullCalendarWidget
                     'end' => $event->end,
                     'backgroundColor' => $event->backgroundColor,
                     'bordercolor' => $event->bordercolor,
-                    // 'url' => EventResource::getUrl(name: 'edit', parameters: ['record' => $event]),
-                    // 'shouldOpenUrlInNewTab' => true
+                    'url' => EventResource::getUrl(name: 'edit', parameters: ['record' => $event]),
+                    'shouldOpenUrlInNewTab' => true
                 ]
             )
             ->all();
@@ -132,21 +132,21 @@ class CalendarWidget extends FullCalendarWidget
             ];
     }
 
-    protected function modalActions(): array
-    {
-        return [
-            \Saade\FilamentFullCalendar\Actions\EditAction::make()
-                ->mountUsing(
-                    function (Event $record, Forms\Form $form, array $arguments) {
-                        $form->fill(
-                            [
-                                'title' => $record->title,
-                                'start' => $arguments['event']['start'] ?? $record->start,
-                                'end' => $arguments['event']['end'] ?? $record->end
-                            ]
-                        );
-                    }
-                )
-        ];
-    }
+    // protected function modalActions(): array
+    // {
+    //     return [
+    //         \Saade\FilamentFullCalendar\Actions\EditAction::make()
+    //             ->mountUsing(
+    //                 function (Event $record, Forms\Form $form, array $arguments) {
+    //                     $form->fill(
+    //                         [
+    //                             'title' => $record->title,
+    //                             'start' => $arguments['event']['start'] ?? $record->start,
+    //                             'end' => $arguments['event']['end'] ?? $record->end
+    //                         ]
+    //                     );
+    //                 }
+    //             )
+    //     ];
+    // }
 }
