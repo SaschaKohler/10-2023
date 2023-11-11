@@ -5,6 +5,11 @@
 /public/storage
 /storage/*.key
 /vendor
+.php-cs-fixer.cache
+.Session.vim
+.gitignore
+.gitattributes
+.editorconfiig
 .env
 .env.backup
 .env.production
