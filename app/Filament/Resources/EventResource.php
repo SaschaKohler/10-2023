@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\ZipCode;
 use Filament\Forms;
 use Filament\Forms\Form;
+use App\Filament\Resources\EventResource\RelationManagers;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -138,7 +139,7 @@ class EventResource extends Resource
                                     ->label(__('filament::resources/event-resource.client_detail.phone1'))
                                     ->required()
                                     ->tel(),
-                                Forms\Components\TextInput::make('address')
+                                Forms\Components\TextInput::make('street')
                                     ->label(__('filament::resources/event-resource.client_detail.address'))
                                     ->required()
                                 ]
@@ -239,6 +240,7 @@ class EventResource extends Resource
     {
         return [
             //
+            RelationManagers\AddressesRelationManager::class
         ];
     }
 

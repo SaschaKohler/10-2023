@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 
@@ -112,10 +113,10 @@ class Event extends Model
     //     return $this->belongsToMany(Vehicle::class);
     // }
 
-    // public function addresses():MorphToMany
-    // {
-    //     return $this->morphToMany(Address::class, 'addressable');
-    // }
+    public function addresses():MorphToMany
+    {
+        return $this->morphToMany(Address::class, 'addressable');
+    }
 
 
 

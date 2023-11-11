@@ -36,7 +36,7 @@ RUN docker-php-ext-install zip && docker-php-ext-enable zip
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
 #RUN pecl install redis && docker-php-ext-enable redis
-UN docker-php-ext-enable opcache
+RUN docker-php-ext-enable opcache
 
 #RUN pecl install xdebug
 #RUN docker-php-ext-enable xdebug
