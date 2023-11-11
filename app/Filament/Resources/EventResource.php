@@ -73,6 +73,7 @@ class EventResource extends Resource
                             ->label(__('filament::resources/event-resource.table.start'))
                             ->firstDayOfWeek(1)
                             ->seconds(false)
+                            ->minutesStep(15)
                             ->required(),
                         Forms\Components\DateTimePicker::make('end')
                             ->label(__('filament::resources/event-resource.end'))
