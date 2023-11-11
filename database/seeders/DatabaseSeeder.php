@@ -235,6 +235,6 @@ class DatabaseSeeder extends Seeder
         //
         //            $todo->save();
         //        });
-
+               Seeder::call(ZipCodesTableSeeder::class);
     }
 }
