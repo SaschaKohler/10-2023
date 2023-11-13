@@ -5,7 +5,6 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\EventResource\Pages;
 use App\Models\Calendar;
 use App\Models\Event;
-use App\Models\User;
 use App\Models\ZipCode;
 use Filament\Forms;
 use Filament\Forms\Form;
