@@ -8,6 +8,7 @@ return [
     "calendar_type" => "Kategorie",
     "start" => "Beginn",
     "end" => "Ende",
+    "sum" => "Stunden",
     "all_day" => "ganztägig",
     "recurrence" => "Wiederholung",
     "attachments" => "Anhang",

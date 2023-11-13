@@ -5,10 +5,12 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\EventResource\Pages;
 use App\Models\Calendar;
 use App\Models\Event;
+use App\Models\User;
 use App\Models\ZipCode;
 use Filament\Forms;
 use Filament\Forms\Form;
 use App\Filament\Resources\EventResource\RelationManagers;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -99,7 +101,7 @@ class EventResource extends Resource
                             )
                             ->required(),
 
-                        Forms\Components\Card::make()
+                        Forms\Components\Section::make()
                             ->label(__('filament::resources/event-resource.attachments'))
                             ->schema(
                                 [
@@ -119,6 +121,7 @@ class EventResource extends Resource
                     ->schema(
                         [
                         Forms\Components\Select::make('user_id')
+                            ->live()
                             ->label(__('filament::resources/event-resource.table.client'))
                             ->relationship(
                                 'client', 'name1',
@@ -142,25 +145,68 @@ class EventResource extends Resource
                                     ->tel(),
                                 Forms\Components\TextInput::make('street')
                                     ->label(__('filament::resources/event-resource.client_detail.address'))
-                                    ->required()
+                                    ->required(),
+
+                                Forms\Components\Select::make('zip')
+                                    ->label(__('filament::common.zip'))
+                                    ->reactive()
+                                    ->searchable()
+                                    ->getSearchResultsUsing(fn(string $query) => ZipCode::where('zip', 'like', "%{$query}%")->pluck('zip', 'id'))
+                                    ->getOptionLabelUsing(fn($value): ?string => ZipCode::find($value)?->getAttribute('zip'))
+                                    ->afterStateUpdated(
+                                        function (Set $set, $state) {
+                                            if (filled($state)) {
+                                                $set('city', ZipCode::find($state)->getAttribute('id'));
+                                            }
+                                        }
+                                    )
+                                    ->columnSpan(1),
+
+                                Forms\Components\Select::make('city')
+                                    ->label(__('filament::common.city'))
+                                    ->reactive()
+                                    ->searchable()
+                                    ->getSearchResultsUsing(fn(string $query) => ZipCode::where('location', 'like', "%{$query}%")->pluck('location', 'id'))
+                                    ->getOptionLabelUsing(fn($value): ?string => ZipCode::find($value)?->getAttribute('location'))
+                                    ->afterStateUpdated(
+                                        function (Set $set, $state) {
+                                            if (filled($state)) {
+                                                $set('zip', ZipCode::find($state)->getAttribute('id'));
+                                            }
+                                        }
+                                    ),
+
+                                Forms\Components\Select::make('role_id')
+                                    ->label(__('filament::common.role_id'))
+                                    ->options(
+                                        [
+                                        '1' => __('filament::common.role.admin'),
+                                        '2' => __('filament::common.role.employee'),
+                                        '3' => __('filament::common.role.client'),
+                                        '4' => __('filament::common.role.supplier'),
+                                        '5' => __('filament::common.role.dealer'),
+                                        '6' => __('filament::common.role.guest'),
+                                        ]
+                                    )
+                                    ->default(3)
                                 ]
                             ),
-                        Forms\Components\Card::make()->schema(
+                        Forms\Components\Section::make()->schema(
                             [
                             Forms\Components\Placeholder::make('Name')
                                 ->label(__('filament::resources/event-resource.client_detail.name'))
-                                ->content(fn(Event $record): ?string => $record->client->name1),
+                                ->content(fn(Event $record): ?string => $record->client->name1 ?? "-"),
                             Forms\Components\Placeholder::make('email')
                                 ->label(__('filament::resources/event-resource.client_detail.email'))
-                                ->content(fn(Event $record): ?string => $record->client->email),
+                                ->content(fn(Event $record): ?string => $record->client->email ?? "-"),
                             Forms\Components\Placeholder::make('phone1')
                                 ->label(__('filament::resources/event-resource.client_detail.phone1'))
-                                ->content(fn(Event $record): ?string => $record->client->phone1),
+                                ->content(fn(Event $record): ?string => $record->client->phone1 ?? "-"),
                             Forms\Components\Placeholder::make('street')
                                 ->label(__('filament::resources/event-resource.client_detail.address'))
                                 ->content(
-                                    fn(Event $record): ?string => $record->client->street . ' / '
-                                    . ZipCode::find($record->client->city)?->location ?? null
+                                    fn(Event $record): ?string => $record->client->street ?? "-" . ' / '
+                                    . ZipCode::find($record->client->city ?? null)?->location ?? null
                                 ),
                             Forms\Components\Placeholder::make('created_at')
                                 ->label(__('filament::common.created_at'))
@@ -241,7 +287,8 @@ class EventResource extends Resource
     {
         return [
             //
-            RelationManagers\AddressesRelationManager::class
+            RelationManagers\AddressesRelationManager::class,
+            RelationManagers\EmployeesRelationManager::class
         ];
     }
 

@@ -15,6 +15,15 @@ class AddressesRelationManager extends RelationManager
 {
     protected static string $relationship = 'addresses';
 
+    protected static ?string $label = 'Baustellen Adresse';
+
+    /**
+     * @deprecated Override the `table()` method to configure the table.
+     */
+
+    protected static ?string $modelLabel = 'zus. Addresse';
+
+
     public function form(Form $form): Form
     {
 

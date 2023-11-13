@@ -23,8 +23,6 @@ class CalendarWidget extends FullCalendarWidget
     protected static ?string $heading = 'Total customers';
 
 
-
-
     public function fetchEvents(array $fetchInfo): array
     {
 
@@ -70,16 +68,7 @@ class CalendarWidget extends FullCalendarWidget
                         ->columnSpan(2),
 
                     ]
-                )->columns('4'),
-
-
-                Forms\Components\Section::make()
-                    ->schema([
-
-                    Forms\Components\Toggle::make('extendedProps.allDay')
-                        ->label(__('filament::widgets/calendar-widget.allday'))
-                        ->columnSpan(2),
-                    ])
+                )->columns(4)
         ];
     }
 
@@ -150,4 +139,5 @@ class CalendarWidget extends FullCalendarWidget
     //     ];
     // }
 }
+
 
