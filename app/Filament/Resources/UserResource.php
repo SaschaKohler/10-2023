@@ -173,31 +173,48 @@ class UserResource extends Resource
         return $table
             ->columns(
                 [
-                //
-                Tables\Columns\TextColumn::make('name1')
-                    ->label(__('filament::resources/user-resource.name'))
-                    ->sortable()
-                    ->searchable(isIndividual: true, isGlobal: false),
 
-                Tables\Columns\TextColumn::make('email')
-                    ->searchable(isIndividual: true, isGlobal: false)
-                    ->toggleable(),
-                Tables\Columns\BadgeColumn::make('role_id')
-                    ->label(__('filament::common.role_id'))
-                    ->colors(
+                    Tables\Columns\Layout\Split::make(
                         [
-                        'primary',
-                        'success' => '1',
-                        'danger' => '2'
+
+                        Tables\Columns\TextColumn::make('name1')
+                            ->label(__('filament::resources/user-resource.name'))
+                            ->sortable()
+                            ->searchable(isIndividual: true, isGlobal: false),
+                        Tables\Columns\Layout\Stack::make(
+                            [
+                            Tables\Columns\TextColumn::make('email')
+                                ->searchable(isIndividual: true, isGlobal: false)
+                                ->toggleable(),
+                            Tables\Columns\BadgeColumn::make('role_id')
+                                ->label(__('filament::common.role_id'))
+                                ->colors(
+                                    [
+                                    'primary',
+                                    'success' => '1',
+                                    'danger' => '2'
+                                    ]
+                                )
+                                ->toggleable(),
+                            Tables\Columns\TextColumn::make('events.title')
+                                ->label(__('filament::resources/user-resource.table.events'))
+                                ->wrap(),
+                            Tables\Columns\ColorColumn::make('color')
+                                ->label(__('filament::common.color')),
+                            ]
+                        )->visibleFrom('md')
                         ]
-                    )
-                    ->toggleable(),
-                Tables\Columns\TextColumn::make('events.title')
-                    ->label(__('filament::resources/user-resource.table.events'))
-                    ->wrap(),
-                Tables\Columns\ColorColumn::make('color')
-                    ->label(__('filament::common.color')),
-                ]
+                    ),
+
+                        Tables\Columns\Layout\Stack::make(
+                            [
+                            Tables\Columns\TextColumn::make('email')
+                                ->searchable(isIndividual: true, isGlobal: false)
+                                ->toggleable(),
+                            Tables\Columns\TextColumn::make('phone')
+                            ]
+                        )->visibleOn('sm')
+                        ]
             )
             ->filters(
                 [
