@@ -11,7 +11,11 @@ use Filament\Forms\Form;
 use App\Filament\Resources\EventResource\RelationManagers;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -243,22 +247,45 @@ class EventResource extends Resource
         return $table
             ->columns(
                 [
-                //
-                Tables\Columns\TextColumn::make('title')
-                    ->label(__('filament::resources/event-resource.table.title'))
-                    ->sortable()
-                    ->searchable(isIndividual: true, isGlobal: false),
-                Tables\Columns\TextColumn::make('start')
-                    ->label(__('filament::resources/event-resource.table.start'))
-                    ->sortable()
-                    ->date('d.M.y'),
-                Tables\Columns\TextColumn::make('end')
-                    ->label(__('filament::resources/event-resource.end'))
-                    ->sortable()
-                    ->date('d.M.y'),
-                Tables\Columns\TextColumn::make('client.name1')
-                    ->label(__('filament::resources/event-resource.table.client'))
-                    ->searchable(isIndividual:true, isGlobal:false)
+                    Split::make(
+                        [
+                        TextColumn::make('title')
+                            ->weight(FontWeight::Bold)
+                            ->label(__('filament::resources/event-resource.table.title'))
+                            ->sortable()
+                            ->searchable(isIndividual: true, isGlobal: false),
+                        TextColumn::make('start')
+                            ->label(__('filament::resources/event-resource.table.start'))
+                            ->sortable()
+                            ->date('d.M.y'),
+                        TextColumn::make('end')
+                            ->label(__('filament::resources/event-resource.end'))
+                            ->sortable()
+                            ->date('d.M.y')
+                            ->toggleable(),
+                        TextColumn::make('client.name1')
+                            ->label(__('filament::resources/event-resource.table.client'))
+                            ->searchable(isIndividual:true, isGlobal:false)
+                        ]
+                    )->visibleFrom('md'),
+                    Stack::make(
+                        [
+                        TextColumn::make('title')
+                            ->weight(FontWeight::Bold)
+                            ->label(__('filament::resources/event-resource.table.title'))
+                            ->sortable()
+                            ->searchable(isIndividual: true, isGlobal: false),
+                        TextColumn::make('start')
+                            ->label(__('filament::resources/event-resource.table.start'))
+                            ->sortable()
+                            ->date('d.M.y'),
+                        TextColumn::make('client.name1')
+                            ->badge()
+                            ->label(__('filament::resources/event-resource.table.client'))
+                            ->searchable(isIndividual:true, isGlobal:false)
+
+                        ]
+                    )->hiddenFrom('md')
                 ]
             )
             ->filters(
@@ -268,7 +295,12 @@ class EventResource extends Resource
             )
             ->actions(
                 [
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make(
+                    [
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make()
+                    ]
+                )
                 ]
             )
             ->bulkActions(

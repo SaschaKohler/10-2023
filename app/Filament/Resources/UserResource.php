@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
 
@@ -180,40 +181,33 @@ class UserResource extends Resource
                         Tables\Columns\TextColumn::make('name1')
                             ->label(__('filament::resources/user-resource.name'))
                             ->sortable()
+                            ->weight(FontWeight::Bold)
                             ->searchable(isIndividual: true, isGlobal: false),
-                        Tables\Columns\Layout\Stack::make(
-                            [
                             Tables\Columns\TextColumn::make('email')
                                 ->searchable(isIndividual: true, isGlobal: false)
-                                ->toggleable(),
-                            Tables\Columns\BadgeColumn::make('role_id')
-                                ->label(__('filament::common.role_id'))
-                                ->colors(
-                                    [
-                                    'primary',
-                                    'success' => '1',
-                                    'danger' => '2'
-                                    ]
-                                )
-                                ->toggleable(),
+                                ->toggleable()
+                                ->icon('heroicon-m-envelope')
+                                ->visibleFrom('md'),
+                            Tables\Columns\TextColumn::make('phone1')
+                                ->icon('heroicon-m-phone')
+                                ->visibleFrom('md'),
                             Tables\Columns\TextColumn::make('events.title')
                                 ->label(__('filament::resources/user-resource.table.events'))
-                                ->wrap(),
-                            Tables\Columns\ColorColumn::make('color')
-                                ->label(__('filament::common.color')),
-                            ]
-                        )->visibleFrom('md')
+                                ->wrap()
+                                ->visibleFrom('md'),
                         ]
                     ),
-
                         Tables\Columns\Layout\Stack::make(
                             [
                             Tables\Columns\TextColumn::make('email')
                                 ->searchable(isIndividual: true, isGlobal: false)
-                                ->toggleable(),
-                            Tables\Columns\TextColumn::make('phone')
+                                ->toggleable()
+                                ->icon('heroicon-m-envelope'),
+                            Tables\Columns\TextColumn::make('phone1')
+                                ->icon('heroicon-m-phone'),
                             ]
-                        )->visibleOn('sm')
+                        )->hiddenFrom('md')
+
                         ]
             )
             ->filters(
