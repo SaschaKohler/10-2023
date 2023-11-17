@@ -142,6 +142,17 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password')
             ]
         );
+        User::factory()->create( // Need  a blank KUNDE for fetching google_events if user is not in database
+            [
+            'phone1' => '0650 903 3 72',
+            'name1' => 'KUNDE',
+            'email' => 'kunde@skit.at',
+            'color' => 'rgb(54, 162, 235)',
+            'role_id' => 3,
+            'password' => Hash::make('password')
+            ]
+        );
+
 
         User::factory()->create(
             [

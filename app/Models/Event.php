@@ -40,8 +40,12 @@ class Event extends Model
     {
         return $this->belongsTo(Calendar::class);
     }
-
-    public function scopeFilter($query, array $filters)
+    /**
+     * @return void
+     * @param  mixed            $query
+     * @param  array<int,mixed> $filters
+     */
+    public function scopeFilter($query, array $filters): void
     {
         $defaultCalendars = ['persönlich', 'Zaunbau', 'Stockfräsen', 'Gartenpflege', 'Böschungsmähen', 'Baumpflege', 'Winterdienst', 'Sonstiges'];
         $query->when(

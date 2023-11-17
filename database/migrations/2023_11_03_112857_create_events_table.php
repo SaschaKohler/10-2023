@@ -32,6 +32,8 @@ return new class extends Migration
                     ->on('users')->cascadeOnDelete();
                 $table->foreignId('author_id')->nullable()->references('id')
                     ->on('users')->cascadeOnDelete();
+                $table->foreignId('editor_id')->nullable()->references('id')
+                    ->on('users')->cascadeOnDelete();
                 $table->foreignId('calendar_id')->nullable()->constrained()->cascadeOnDelete();
                 $table->softDeletes();
                 $table->timestamps();

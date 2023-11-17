@@ -258,11 +258,6 @@ class EventResource extends Resource
                             ->label(__('filament::resources/event-resource.table.start'))
                             ->sortable()
                             ->date('d.M.y'),
-                        TextColumn::make('end')
-                            ->label(__('filament::resources/event-resource.end'))
-                            ->sortable()
-                            ->date('d.M.y')
-                            ->toggleable(),
                         TextColumn::make('client.name1')
                             ->label(__('filament::resources/event-resource.table.client'))
                             ->searchable(isIndividual:true, isGlobal:false)
@@ -283,7 +278,6 @@ class EventResource extends Resource
                             ->badge()
                             ->label(__('filament::resources/event-resource.table.client'))
                             ->searchable(isIndividual:true, isGlobal:false)
-
                         ]
                     )->hiddenFrom('md')
                 ]
