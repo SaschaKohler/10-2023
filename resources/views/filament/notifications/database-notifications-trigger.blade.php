@@ -1,3 +1,3 @@
 <button type="button">
-Notifications ({{ UnreadNotificationscount}}  unread)
+Notifications ({{ $unreadNotificationsCount}}  unread)
 </button>

@@ -6,6 +6,7 @@ use App\Filament\Resources\EventResource;
 use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Actions;
+use Filament\Pages\Dashboard;
 use Filament\Resources\Pages\EditRecord;
 
 class EditEvent extends EditRecord
@@ -23,7 +24,8 @@ class EditEvent extends EditRecord
 
     protected function getRedirectUrl(): string
     {
-        return $this->getResource()::getUrl('index');
+        return //$this->getResource()::getUrl('dashboard');
+        Dashboard::getUrl();
     }
 
 
