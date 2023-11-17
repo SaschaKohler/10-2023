@@ -6,11 +6,21 @@ use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
 use App\Models\ZipCode;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
-use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\RestoreBulkAction;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 
 class UserResource extends Resource
@@ -175,35 +185,35 @@ class UserResource extends Resource
             ->columns(
                 [
 
-                    Tables\Columns\Layout\Split::make(
-                        [
+                Split::make(
+                    [
 
-                        Tables\Columns\TextColumn::make('name1')
+                        TextColumn::make('name1')
                             ->label(__('filament::resources/user-resource.name'))
                             ->sortable()
                             ->weight(FontWeight::Bold)
                             ->searchable(isIndividual: true, isGlobal: false),
-                            Tables\Columns\TextColumn::make('email')
-                                ->searchable(isIndividual: true, isGlobal: false)
-                                ->toggleable()
-                                ->icon('heroicon-m-envelope')
-                                ->visibleFrom('md'),
-                            Tables\Columns\TextColumn::make('phone1')
-                                ->icon('heroicon-m-phone')
-                                ->visibleFrom('md'),
-                            Tables\Columns\TextColumn::make('events.title')
-                                ->label(__('filament::resources/user-resource.table.events'))
-                                ->wrap()
-                                ->visibleFrom('md'),
+                        TextColumn::make('email')
+                            ->searchable(isIndividual: true, isGlobal: false)
+                            ->toggleable()
+                            ->icon('heroicon-m-envelope')
+                            ->visibleFrom('md'),
+                        TextColumn::make('phone1')
+                            ->icon('heroicon-m-phone')
+                            ->visibleFrom('md'),
+                        TextColumn::make('events.title')
+                            ->label(__('filament::resources/user-resource.table.events'))
+                            ->wrap()
+                            ->visibleFrom('md'),
                         ]
-                    ),
-                        Tables\Columns\Layout\Stack::make(
+                ),
+                        Stack::make(
                             [
-                            Tables\Columns\TextColumn::make('email')
+                            TextColumn::make('email')
                                 ->searchable(isIndividual: true, isGlobal: false)
                                 ->toggleable()
                                 ->icon('heroicon-m-envelope'),
-                            Tables\Columns\TextColumn::make('phone1')
+                            TextColumn::make('phone1')
                                 ->icon('heroicon-m-phone'),
                             ]
                         )->hiddenFrom('md')
@@ -213,10 +223,10 @@ class UserResource extends Resource
             ->filters(
                 [
                 //
-                Tables\Filters\Filter::make('role_id')
+                Filter::make('role_id')
                     ->form(
                         [
-                        Forms\Components\Select::make('role_id')
+                        Select::make('role_id')
                             ->label(__('filament::common.role_id'))
                             ->options(
                                 [
@@ -237,24 +247,24 @@ class UserResource extends Resource
                             );
                         }
                     ),
-                Tables\Filters\TrashedFilter::make(),
+                TrashedFilter::make(),
 
                 ]
             )
             ->actions(
                 [
-                Tables\Actions\ActionGroup::make(
+                ActionGroup::make(
                     [
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make()
+                    EditAction::make(),
+                    DeleteAction::make()
                     ]
                 )
                 ]
             )
             ->bulkActions(
                 [
-                Tables\Actions\DeleteBulkAction::make(),
-                Tables\Actions\RestoreBulkAction::make()
+                DeleteBulkAction::make(),
+                RestoreBulkAction::make()
                 ]
             );
     }
