@@ -196,7 +196,7 @@ class DatabaseSeeder extends Seeder
                $employees = User::query()->where('role_id', '=', 2)->get();
         //
 
-               Event::factory()->count(20)
+               Event::factory()->count(5)
                    ->sequence(fn($sequence) => [
                        'user_id' => $clients->random()->getKey(),
                        'calendar_id' => $calendars->random()->getKey()

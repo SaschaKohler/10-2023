@@ -66,13 +66,15 @@ class CalendarWidget extends FullCalendarWidget
                 }
             )->toArray();
 
+
             $google_events_collection = collect($google_events);
+            $filtered_google_collection=$google_events_collection->where('calendar_id', '!=', 1);
             $items = array();
             foreach ($admin_events as $event) {
                 array_push($items, $event['google_id']);
             }
 
-            $filter = $google_events_collection->whereNotIn('id', $items)->toArray();
+            $filter = $filtered_google_collection->whereNotIn('id', $items)->toArray();
 
 
             return array_merge($filter, $admin_events);
@@ -95,7 +97,7 @@ class CalendarWidget extends FullCalendarWidget
             $new->google_id = $param['id'];
             $new->title = explode(' *', $param['title'])[0];
             $new->start = $param['start'];
-            $new->end = $param['end'];
+            $new->end = $param['end'] ?? null;
             $new->author_id = auth()->id();
             $new->calendar_id = $param['extendedProps']['calendar_id'];
 
@@ -153,24 +155,24 @@ class CalendarWidget extends FullCalendarWidget
 
     public function onEventDrop($newEvent, $oldEvent, $relatedEvents,$delta): bool
     {
+        if(is_numeric($oldEvent['id'])) {
+            $this->event = Event::find($newEvent['id']);
+            // dd($newEvent, $oldEvent, $delta);
+            if (!array_key_exists('end', $newEvent)) {
+                $dt = DateTime::createFromFormat("Y-m-d\TH:i:s\Z", $newEvent['start']);
+                if ($dt) {
+                    $dt->add(new DateInterval('PT1H'));
+                    $newEvent['end'] = $dt->format('Y-m-d\TH:i:s\Z');
+                    $newEvent['allDay'] = false;
+                    $newEvent['extendedProps']['allDay'] = false;
+                } else {
+                    $newEvent['allDay'] = true;
+                    $newEvent['extendedProps']['allDay'] = true;
 
-        $this->event = Event::find($newEvent['id']);
-        // dd($newEvent, $oldEvent, $delta);
-        if (!array_key_exists('end', $newEvent)) {
-            $dt = DateTime::createFromFormat("Y-m-d\TH:i:s\Z", $newEvent['start']);
-            if ($dt) {
-                $dt->add(new DateInterval('PT1H'));
-                $newEvent['end'] = $dt->format('Y-m-d\TH:i:s\Z');
-                $newEvent['allDay'] = false;
-                $newEvent['extendedProps']['allDay'] = false;
-            } else {
-                $newEvent['allDay'] = true;
-                $newEvent['extendedProps']['allDay'] = true;
-
+                }
             }
-        }
 
-        $this->event->update($newEvent);
+            $this->event->update($newEvent);
 
             Notification::make()
                 ->title('Eintrag geändert')
@@ -178,7 +180,20 @@ class CalendarWidget extends FullCalendarWidget
 
                 ->duration(5000)
                 ->send();
-        return false;
+            return false;
+
+
+        }
+
+            Notification::make()
+                ->title('nicht möglich -> google-calendar')
+                ->icon('heroicon-o-shield-exclamation')
+                ->iconColor('danger')
+                ->duration(5000)
+                ->send();
+
+            return false;
+
 
     }
 

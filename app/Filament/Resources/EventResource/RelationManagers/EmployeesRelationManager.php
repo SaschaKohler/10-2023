@@ -7,15 +7,21 @@ use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Database\Eloquent\Model;
 
 class EmployeesRelationManager extends RelationManager
 {
     protected static string $relationship = 'employees';
+
+
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return __('filament::common.employees');
+    }
 
     public function form(Form $form): Form
     {
@@ -54,6 +60,7 @@ class EmployeesRelationManager extends RelationManager
     {
 
         return $table
+            ->heading(__('filament::common.employees'))
             ->columns(
                 [
 

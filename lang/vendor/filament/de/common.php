@@ -16,7 +16,7 @@ return [
     'created_at' => 'Erstellt',
     'updated_at' => 'zuletzt bearbeitet',
     'role_id' => 'Kategorie',
-
+    'address_of_event' => 'zus. Addresse',
     'dashboard' => [
       'yesterday' => 'Gestern',
       'week' => 'letzte Woche',
@@ -31,6 +31,6 @@ return [
         'supplier' => 'Zulieferer',
         'dealer' => 'Händler',
         'guest' => 'Gast'
-]
+    ]
 
 ];

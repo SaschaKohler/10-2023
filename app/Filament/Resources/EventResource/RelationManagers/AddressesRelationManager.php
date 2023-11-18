@@ -9,19 +9,19 @@ use Filament\Forms\Set;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use Squire\Models\Country;
 
 class AddressesRelationManager extends RelationManager
 {
     protected static string $relationship = 'addresses';
 
-    protected static ?string $label = 'Baustellen Adresse';
 
-    /**
-     * @deprecated Override the `table()` method to configure the table.
-     */
 
-    protected static ?string $modelLabel = 'zus. Addresse';
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return __('filament::common.address_of_event');
+    }
 
 
     public function form(Form $form): Form
@@ -75,6 +75,7 @@ class AddressesRelationManager extends RelationManager
     {
 
         return $table
+            ->heading(__('filament::common.address_of_event'))
             ->columns(
                 [
                 Tables\Columns\TextColumn::make('street')

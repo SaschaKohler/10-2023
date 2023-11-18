@@ -28,6 +28,8 @@ return new class extends Migration
 
                 $table->json('extendedProps')->nullable();
                 $table->json('images')->nullable();
+                $table->foreignId('event_id')->nullable()->references('id')->on('events')
+                    ->cascadeOnDelete();
                 $table->foreignId('user_id')->nullable()->references('id')
                     ->on('users')->cascadeOnDelete();
                 $table->foreignId('author_id')->nullable()->references('id')
