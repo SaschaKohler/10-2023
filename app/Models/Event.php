@@ -112,10 +112,10 @@ class Event extends Model
     }
 
 
-    // public function vehicles(): BelongsToMany
-    // {
-    //     return $this->belongsToMany(Vehicle::class);
-    // }
+    public function vehicles(): BelongsToMany
+    {
+        return $this->belongsToMany(Vehicle::class);
+    }
 
     public function addresses():MorphToMany
     {

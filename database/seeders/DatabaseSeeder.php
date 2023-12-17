@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Calendar;
+use App\Models\Vehicle;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use App\Models\Event;
@@ -237,7 +238,7 @@ class DatabaseSeeder extends Seeder
         //  });
         // Seeder::call(ZipCodesTableSeeder::class);
 
-        // Vehicle::factory(16)->create();//->each(function (Vehicle $vehicle) use ($events) {
+        Vehicle::factory(16)->create();//->each(function (Vehicle $vehicle) use ($events) {
         //       $vehicle->events()->sync($events->random(random_int(1, 2)));
         // });
 

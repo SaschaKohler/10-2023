@@ -24,6 +24,8 @@ class EventResource extends Resource
 {
     protected static ?string $model = Event::class;
 
+    protected static ?string $navigationGroup = 'Projekte';
+    protected static ?string $navigationLabel = 'Baustelle';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
@@ -313,7 +315,8 @@ class EventResource extends Resource
         return [
             //
             RelationManagers\AddressesRelationManager::class,
-            RelationManagers\EmployeesRelationManager::class
+            RelationManagers\EmployeesRelationManager::class,
+            RelationManagers\VehicleRelationManager::class
         ];
     }
 

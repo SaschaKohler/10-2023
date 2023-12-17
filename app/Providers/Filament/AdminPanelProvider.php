@@ -7,7 +7,11 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\MenuItem;
+use Filament\Navigation\NavigationBuilder;
+use Filament\Navigation\NavigationGroup;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages;
+use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Widgets;
@@ -30,6 +34,39 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            // ->navigation(
+            //     function (NavigationBuilder $builder): NavigationBuilder {
+            //         return $builder->items(
+            //             [
+            //             NavigationItem::make('Dashboard')
+            //                 ->icon('heroicon-s-home')
+            //                 ->url(fn (): string => Dashboard::getUrl())
+            //             ]
+            //         );
+            //     }
+            // )
+            // ->navigation(
+            //     function (NavigationBuilder $builder): NavigationBuilder {
+            //         return $builder->groups(
+            //             [
+            //             NavigationGroup::make('Projekte')
+            //             ->items(
+            //                 [
+            //                 ...UserResource::getNavigationItems()
+            //                 ]
+            //             ),
+            //
+            //             NavigationGroup::make('Buchführung')
+            //             ->items(
+            //                 [
+            //                 ...UserResource::getNavigationItems()
+            //                 ]
+            //             )
+            //
+            //             ]
+            //         );
+            //     }
+            // )
             ->userMenuItems(
                 [
                 'profile' => MenuItem::make()->label('Edit profile'),
