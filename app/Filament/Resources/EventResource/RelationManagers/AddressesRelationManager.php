@@ -3,11 +3,17 @@
 namespace App\Filament\Resources\EventResource\RelationManagers;
 
 use App\Models\ZipCode;
-use Filament\Forms;
+use Filament\Actions\CreateAction;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables;
+use Filament\Tables\Actions\AttachAction;
+use Filament\Tables\Actions\DetachAction;
+use Filament\Tables\Actions\DetachBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Squire\Models\Country;
@@ -30,11 +36,11 @@ class AddressesRelationManager extends RelationManager
         return $form
             ->schema(
                 [
-                Forms\Components\TextInput::make('manager')
+                TextInput::make('manager')
                     ->label(__('filament::forms/components/address-form.manager')),
-                Forms\Components\TextInput::make('street')
+                TextInput::make('street')
                     ->label(__('filament::forms/components/address-form.street')),
-                Forms\Components\Select::make('zip')
+                Select::make('zip')
                     ->label(__('filament::common.zip'))
                     ->reactive()
                     ->searchable()
@@ -47,7 +53,7 @@ class AddressesRelationManager extends RelationManager
                             }
                         }
                     ),
-                Forms\Components\Select::make('city')
+                Select::make('city')
                     ->label(__('filament::common.city'))
                     ->reactive()
                     ->searchable()
@@ -61,7 +67,7 @@ class AddressesRelationManager extends RelationManager
                         }
                     ),
 
-                Forms\Components\Select::make('country')
+                Select::make('country')
                     ->label(__('filament::forms/components/address-form.country'))
                     ->searchable()
                     ->getSearchResultsUsing(fn(string $query) => Country::where('name', 'like', "%{$query}%")->pluck('name', 'id'))
@@ -78,21 +84,21 @@ class AddressesRelationManager extends RelationManager
             ->heading(__('filament::common.address_of_event'))
             ->columns(
                 [
-                Tables\Columns\TextColumn::make('street')
+                TextColumn::make('street')
                     ->label(__('filament::forms/components/address-form.street')),
 
 
-                Tables\Columns\TextColumn::make('zip')
+                TextColumn::make('zip')
                     ->label(__('filament::forms/components/address-form.zip'))
                     ->getStateUsing(fn($record): ?string => ZipCode::find($record->zip)?->zip ?? null),
 
 
-                Tables\Columns\TextColumn::make('city')
+                TextColumn::make('city')
                     ->label(__('filament::forms/components/address-form.city'))
                     ->getStateUsing(fn($record): ?string => ZipCode::find($record->city)?->location ?? null),
 
 
-                Tables\Columns\TextColumn::make('country')
+                TextColumn::make('country')
                     ->label(__('filament::forms/components/address-form.country'))
                     ->formatStateUsing(fn($state): ?string => Country::find($state)?->name ?? null),
                 ]
@@ -104,19 +110,19 @@ class AddressesRelationManager extends RelationManager
             )
             ->headerActions(
                 [
-                Tables\Actions\AttachAction::make(),
-                Tables\Actions\CreateAction::make(),
+                AttachAction::make(),
+                CreateAction::make(),
                 ]
             )
             ->actions(
                 [
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DetachAction::make(),
+                EditAction::make(),
+                DetachAction::make(),
                 ]
             )
             ->bulkActions(
                 [
-                Tables\Actions\DetachBulkAction::make(),
+                DetachBulkAction::make(),
                 ]
             );
     }
