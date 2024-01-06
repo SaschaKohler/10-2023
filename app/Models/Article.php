@@ -14,6 +14,22 @@ class Article extends Model
     protected $guarded = ['id'];
 
 
+    protected $fillable = [
+        'uuid',
+        'matnr',
+        'search',
+        'short_text',
+        'unit',
+        'lpr',
+        'ek',
+        'vk1',
+        'vk1_perc',
+        'vk2',
+        'vk2_perc',
+        'vk3',
+        'vk3_perc',
+    ];
+
     protected function lpr(): Attribute
     {
         return Attribute::make(

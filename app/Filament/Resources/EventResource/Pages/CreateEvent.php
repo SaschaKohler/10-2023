@@ -5,7 +5,7 @@ namespace App\Filament\Resources\EventResource\Pages;
 use App\Filament\Resources\EventResource;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
-use Filament\Tables\Actions\Action;
+use Filament\Notifications\Actions\Action;
 
 class CreateEvent extends CreateRecord
 {
@@ -28,4 +28,13 @@ class CreateEvent extends CreateRecord
             )
             ->sendToDatabase(auth()->user());
     }
+
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['author_id'] = auth()->id();
+
+        return $data;
+    }
+
 }

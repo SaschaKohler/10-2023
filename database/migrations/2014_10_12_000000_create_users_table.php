@@ -49,9 +49,9 @@ return new class extends Migration
                 $table->text('phone3')->nullable();
                 $table->text('phone4')->nullable();
                 $table->text('fax2')->nullable();
-                $table->index(['name1']);
                 $table->timestamp('email_verified_at')->nullable();
                 $table->string('password')->default('$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
+                $table->index(['name1']);
                 $table->softDeletes();
                 $table->rememberToken();
                 $table->timestamps();

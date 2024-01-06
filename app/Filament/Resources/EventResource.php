@@ -3,16 +3,31 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EventResource\Pages;
+use App\Filament\Resources\EventResource\RelationManagers\EmployeesRelationManager;
+use App\Filament\Resources\EventResource\RelationManagers\VehicleRelationManager;
+use App\Filament\Resources\EventResource\RelationManagers\AddressesRelationManager;
 use App\Models\Calendar;
 use App\Models\Event;
 use App\Models\ZipCode;
-use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
-use App\Filament\Resources\EventResource\RelationManagers;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
-use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ReplicateAction;
+use Filament\Notifications\Actions\Actions;
 use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
@@ -34,14 +49,14 @@ class EventResource extends Resource
             ->schema(
                 [
 
-                Forms\Components\Fieldset::make('EventData')
+                Section::make('EventData')
                     ->label(__('filament::resources/event-resource.event_data'))
                     ->schema(
                         [
-                        Forms\Components\TextInput::make('title')
+                        TextInput::make('title')
                             ->label(__('filament::resources/event-resource.table.title'))
                             ->required(),
-                        Forms\Components\Select::make('calendar_id')
+                        Select::make('calendar_id')
                             ->label(__('filament::resources/event-resource.table.calendar_type'))
                             ->options(
                                 function () {
@@ -76,20 +91,19 @@ class EventResource extends Resource
                             ),
 
 
-                        Forms\Components\DateTimePicker::make('start')
+                        DateTimePicker::make('start')
                             ->label(__('filament::resources/event-resource.table.start'))
                             ->firstDayOfWeek(1)
                             ->seconds(false)
-                            ->minutesStep(15)
                             ->required(),
-                        Forms\Components\DateTimePicker::make('end')
+                        DateTimePicker::make('end')
                             ->label(__('filament::resources/event-resource.end'))
                             ->firstDayOfWeek(1)
                             ->seconds(false)
                             ->required(),
-                        Forms\Components\Toggle::make('allDay')->label('allDay')
+                        Toggle::make('allDay')->label('allDay')
                             ->label(__('filament::resources/event-resource.all_day')),
-                        Forms\Components\Select::make('recurrence')
+                        Select::make('recurrence')
                             ->label(__('filament::resources/event-resource.recurrence'))
                             ->options(
                                 [
@@ -106,11 +120,11 @@ class EventResource extends Resource
                             )
                             ->required(),
 
-                        Forms\Components\Section::make()
+                        Section::make()
                             ->label(__('filament::resources/event-resource.attachments'))
                             ->schema(
                                 [
-                                Forms\Components\FileUpload::make('images')
+                                FileUpload::make('images')
                                     ->label(__('filament::resources/event-resource.images'))
                                     ->multiple()
                                     ->disk('public')
@@ -121,11 +135,11 @@ class EventResource extends Resource
                         ]
                     )->columnSpan(['lg' => 2]),
 
-                Forms\Components\Fieldset::make('Client')
+                Section::make('Client')
                     ->label(__('filament::resources/event-resource.client_detail.header'))
                     ->schema(
                         [
-                        Forms\Components\Select::make('user_id')
+                        Select::make('user_id')
                             ->live()
                             ->label(__('filament::resources/event-resource.table.client'))
                             ->relationship(
@@ -137,22 +151,22 @@ class EventResource extends Resource
                             ->preload()
                             ->createOptionForm(
                                 [
-                                Forms\Components\TextInput::make('name1')
+                                TextInput::make('name1')
                                     ->label(__('filament::resources/event-resource.client_detail.name'))
                                     ->required(),
-                                Forms\Components\TextInput::make('email')
+                                TextInput::make('email')
                                     ->label(__('filament::resources/event-resource.client_detail.email'))
                                     ->required()
                                     ->email(),
-                                Forms\Components\TextInput::make('phone1')
+                                TextInput::make('phone1')
                                     ->label(__('filament::resources/event-resource.client_detail.phone1'))
                                     ->required()
                                     ->tel(),
-                                Forms\Components\TextInput::make('street')
+                                TextInput::make('street')
                                     ->label(__('filament::resources/event-resource.client_detail.address'))
                                     ->required(),
 
-                                Forms\Components\Select::make('zip')
+                                Select::make('zip')
                                     ->label(__('filament::common.zip'))
                                     ->reactive()
                                     ->searchable()
@@ -167,7 +181,7 @@ class EventResource extends Resource
                                     )
                                     ->columnSpan(1),
 
-                                Forms\Components\Select::make('city')
+                                Select::make('city')
                                     ->label(__('filament::common.city'))
                                     ->reactive()
                                     ->searchable()
@@ -181,7 +195,7 @@ class EventResource extends Resource
                                         }
                                     ),
 
-                                Forms\Components\Select::make('role_id')
+                                Select::make('role_id')
                                     ->label(__('filament::common.role_id'))
                                     ->options(
                                         [
@@ -196,24 +210,24 @@ class EventResource extends Resource
                                     ->default(3)
                                 ]
                             ),
-                        Forms\Components\Section::make()->schema(
+                        Section::make()->schema(
                             [
-                            Forms\Components\Placeholder::make('Name')
+                            Placeholder::make('Name')
                                 ->label(__('filament::resources/event-resource.client_detail.name'))
                                 ->content(fn(Event $record): ?string => $record->client->name1 ?? "-"),
-                            Forms\Components\Placeholder::make('email')
+                            Placeholder::make('email')
                                 ->label(__('filament::resources/event-resource.client_detail.email'))
                                 ->content(fn(Event $record): ?string => $record->client->email ?? "-"),
-                            Forms\Components\Placeholder::make('phone1')
+                            Placeholder::make('phone1')
                                 ->label(__('filament::resources/event-resource.client_detail.phone1'))
                                 ->content(fn(Event $record): ?string => $record->client->phone1 ?? "-"),
-                            Forms\Components\Placeholder::make('street')
+                            Placeholder::make('street')
                                 ->label(__('filament::resources/event-resource.client_detail.address'))
                                 ->content(
                                     fn(Event $record): ?string => $record->client->street ?? "-" . ' / '
                                     . ZipCode::find($record->client->city ?? null)?->location ?? null
                                 ),
-                            Forms\Components\Placeholder::make('created_at')
+                            Placeholder::make('created_at')
                                 ->label(__('filament::common.created_at'))
                                 ->content(
                                     function (Event $record) {
@@ -223,7 +237,7 @@ class EventResource extends Resource
                                         return $record->created_at->diffForHumans();
                                     }
                                 ),
-                            Forms\Components\Placeholder::make('updated_at')
+                            Placeholder::make('updated_at')
                                 ->label(__('filament::common.updated_at'))
                                 ->content(
                                     function (Event $record) {
@@ -291,19 +305,33 @@ class EventResource extends Resource
             )
             ->actions(
                 [
-                Tables\Actions\ActionGroup::make(
+                ActionGroup::make(
                     [
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make()
+                    EditAction::make(),
+                    ReplicateAction::make()->color('primary')
+                        ->form([DatePicker::make('start')->required()])
+                        ->beforeReplicaSaved(
+                            function (Model $replica, array $data): void {
+                                $replica->start = $data['start'];
+                            }
+                        )
+                        ->afterReplicaSaved(
+                            function (Model $replica, Model $record): void {
+                                $replica->employees()->sync($record->employees()->get());
+                                $replica->vehicles()->sync($record->vehicles()->get());
+
+                            }
+                        ),
+                    DeleteAction::make(),
                     ]
                 )
                 ]
             )
             ->bulkActions(
                 [
-                Tables\Actions\BulkActionGroup::make(
+                BulkActionGroup::make(
                     [
-                    Tables\Actions\DeleteBulkAction::make(),
+                    DeleteBulkAction::make(),
                     ]
                 ),
                 ]
@@ -314,9 +342,9 @@ class EventResource extends Resource
     {
         return [
             //
-            RelationManagers\AddressesRelationManager::class,
-            RelationManagers\EmployeesRelationManager::class,
-            RelationManagers\VehicleRelationManager::class
+            AddressesRelationManager::class,
+            EmployeesRelationManager::class,
+            VehicleRelationManager::class
         ];
     }
 

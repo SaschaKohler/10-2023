@@ -93,7 +93,13 @@ class OrderResource extends Resource
             )
             ->actions(
                 [
+
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('Print')->button()->color('success')
+                    ->requiresConfirmation()
+                    ->modalIcon('heroicon-o-printer')
+                    ->icon('heroicon-o-printer')
+                    ->url(fn (Order $order): string => OrderResource::getUrl('print-order' , [ $order->id ])),
                 ]
             )
             ->bulkActions(
@@ -260,6 +266,8 @@ class OrderResource extends Resource
             'index' => Pages\ListOrders::route('/'),
             'create' => Pages\CreateOrder::route('/create'),
             'edit' => Pages\EditOrder::route('/{record}/edit'),
+            'print-order' => Pages\Invoice::route('/{record}/print/order'),
+
         ];
     }
 

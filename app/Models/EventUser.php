@@ -8,6 +8,14 @@ class EventUser extends Pivot
 {
     protected $table = "event_user";
 
+    protected $fillable = [
+            'event_id',
+            'user_id',
+            'hours',
+            'start_at',
+            'end_at',
+            'sum',
+    ];
 
     protected $casts = [
 

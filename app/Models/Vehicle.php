@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Enum\InsuranceTypeEnum;
-use App\Enum\VehicleTypeEnum;
+use App\Enums\InsuranceTypeEnum;
+use App\Enums\VehicleTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -14,7 +14,19 @@ class Vehicle extends Model
     use HasFactory,SoftDeletes;
 
 
+    protected $fillable = [
+            'owner',
+            'type',
+            'branding',
+            'image',
+            'permit',
+            'license_plate',
+            'insurance_type',
+            'inspection',
+            'insurance_company',
+            'insurance_manager',
 
+    ];
     protected $guarded = ['id'];
 
     protected $casts = [

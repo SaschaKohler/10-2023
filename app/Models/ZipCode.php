@@ -10,6 +10,10 @@ class ZipCode extends Model
     use HasFactory;
 
 
+    protected $fillable = [
+        'zip',
+        'location',
+    ];
 
     public $timestamps = false;
 }

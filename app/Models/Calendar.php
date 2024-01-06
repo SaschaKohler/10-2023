@@ -12,6 +12,12 @@ class Calendar extends Model
     use HasFactory,SoftDeletes;
 
 
+    protected $fillable = [
+        'type',
+        'color_id',
+        'description',
+        'color',
+    ];
 
     public function events() : HasMany
     {

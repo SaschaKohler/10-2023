@@ -29,6 +29,47 @@ class User extends Authenticatable implements FilamentUser, HasName
     //    ];
     //
 
+    protected $fillable = [
+                'uuid',
+                'avatar',
+                'color',
+                'title1',
+                'name1',
+                'name2',
+                'street',
+                'country',
+                'zip',
+                'city',
+                'phone1',
+                'fax1',
+                'phone2',
+                'konto',
+                'blz',
+                'bank',
+                'title2',
+                'manager',
+                'nfaellig',
+                'skonto',
+                'preisgrp',
+                'role_id',
+                'km',
+                'email1',
+                'www',
+                'email',
+                'dob',
+                'datev',
+                'uident',
+                'iban',
+                'bic',
+                'banknr',
+                'phone3',
+                'phone4',
+                'fax2',
+                'name1',
+                'email_verified_at',
+                'password',
+    ];
+
     protected $guarded = [
         'id'
     ];

@@ -67,6 +67,7 @@ class AdminPanelProvider extends PanelProvider
             //         );
             //     }
             // )
+            ->viteTheme('resources/css/filament/company/theme.css')
             ->userMenuItems(
                 [
                 'profile' => MenuItem::make()->label('Edit profile'),

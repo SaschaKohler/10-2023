@@ -14,6 +14,15 @@ class Order extends Model
     use SoftDeletes;
 
 
+    protected $fillable = [
+                'user_id',
+                'event_id',
+                'number',
+                'total_price',
+                'discount',
+                'status',
+                'notes',
+    ];
 
     protected $guarded = [
         'id'

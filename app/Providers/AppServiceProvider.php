@@ -25,6 +25,6 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         DatabaseNotifications::trigger('filament.notifications.database-notifications-trigger');
-        Model::unguard();
+        // Model::unguard();
     }
 }

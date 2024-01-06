@@ -12,6 +12,13 @@ class Address extends Model
 
     protected $guarded = ['id'];
 
+    protected $fillable = [
+        'street',
+        'zip',
+        'city',
+        'manager',
+    ];
+
     public function events(): MorphToMany
     {
         return $this->morphedByMany(Event::class, 'addressable');

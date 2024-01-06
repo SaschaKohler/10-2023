@@ -17,6 +17,25 @@ class Event extends Model
     use HasFactory, SoftDeletes;
 
 
+    protected $fillable = [
+                'google_id',
+                'title',
+                'url',
+                'backgroundcolor',
+                'bordercolor',
+                'textcolor',
+                'start',
+                'end',
+                'allday',
+                'calendar',
+                'recurrence',
+                'extendedprops',
+                'images',
+                'event_id',
+                'user_id',
+                'author_id',
+                'calendar_id',
+    ];
 
     protected $casts = [
         'extendedProps' => 'json',

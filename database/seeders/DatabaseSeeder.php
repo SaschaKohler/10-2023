@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Enums\DocumentType;
 use App\Models\Calendar;
+use App\Models\Company;
+use App\Models\Setting\DocumentDefault;
 use App\Models\Vehicle;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -189,7 +192,11 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-
+        Company::factory()->create(
+            [
+            'user_id' => User::first()
+            ]
+        );
         //     Calendar::factory(15)->create();
 
                $calendars = Calendar::all();
@@ -198,10 +205,12 @@ class DatabaseSeeder extends Seeder
         //
 
                Event::factory()->count(5)
-                   ->sequence(fn($sequence) => [
-                       'user_id' => $clients->random()->getKey(),
-                       'calendar_id' => $calendars->random()->getKey()
-                       ])
+                   ->sequence(
+                    fn($sequence) => [
+                    'user_id' => $clients->random()->getKey(),
+                    'calendar_id' => $calendars->random()->getKey()
+                    ]
+                )
                    // ->employees()->sync($employees->random(rand(1,4)))
                    // ->hasAttached($employees->random(3),
                    //
@@ -237,7 +246,23 @@ class DatabaseSeeder extends Seeder
         //            );
         //  });
         // Seeder::call(ZipCodesTableSeeder::class);
+        DocumentDefault::factory()->invoice()->create([
+            'company_id' => 1,
+            'created_by' => User::first(),
+            'updated_by' => User::first(),
+        ]);
 
+        DocumentDefault::factory()->bill()->create([
+            'company_id' => 1,
+            'created_by' => User::first(),
+            'updated_by' => User::first(),
+        ]);
+
+
+               //     factory()->create([
+               //     'company_id' => User::first(),
+               //     'type' => DocumentType::Invoice
+               // ]);
         Vehicle::factory(16)->create();//->each(function (Vehicle $vehicle) use ($events) {
         //       $vehicle->events()->sync($events->random(random_int(1, 2)));
         // });
