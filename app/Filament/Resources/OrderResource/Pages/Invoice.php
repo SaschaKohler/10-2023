@@ -7,6 +7,7 @@ use App\Enums\Font;
 use App\Enums\PaymentTerms;
 use App\Enums\Template;
 use App\Filament\Resources\OrderResource;
+use App\Models\Order;
 use App\Models\Setting\DocumentDefault as InvoiceModel;
 use App\Models\ZipCode;
 use Barryvdh\Debugbar\Facades\Debugbar;
@@ -347,6 +348,7 @@ class Invoice extends Page
     {
         return [
             $this->getSaveFormAction(),
+            $this->getPrintFormAction(),
         ];
     }
 
@@ -357,6 +359,23 @@ class Invoice extends Page
             ->submit('save')
             ->keyBindings(['mod+s']);
     }
+
+    protected function getPrintFormAction(): Action
+    {
+        return Action::make('Print')
+            ->button()
+            ->color('success')
+            ->requiresConfirmation()
+            ->modalIcon('heroicon-o-printer')
+            ->icon('heroicon-o-printer')
+
+            ->action(fn (Order $order) => redirect()->route('invoices.print', ['id' => $order->id ]));
+            // ->url(route('invoices.pay', ['invoice' => $this->data['id']]))
+            // ->url(fn (Order $order): string => OrderResource::getUrl('check-order', [ $order->id ]));
+
+
+    }
+
 
     public static function canView(Model $record): bool
     {

@@ -19,5 +19,9 @@ Route::get(
         return view('welcome');
     }
 );
-
-Route::get('/invoices/pdf-invoice',  [Invoices::class ,'generatePDF']);
+Route::prefix('admin')->group(
+    function () {
+        Route::get('invoices-print/{id}', [Invoices::class, 'generatePDF'])->name('invoices.print');
+    }
+);
+// Route::get('/invoices/pdf-invoice',  [Invoices::class ,'generatePDF']);

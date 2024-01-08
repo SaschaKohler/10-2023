@@ -2,28 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use Spatie\Browsershot\Browsershot;
+use App\Enums\DocumentType;
+use App\Models\Order;
 use Spatie\LaravelPdf\Facades\Pdf;
-use App\Models\User;
+use App\Models\Setting\DocumentDefault as InvoiceModel;
+
 
 class Invoices extends Controller
 {
-    public function generatePDF()
+    /**
+     * @return Pdf
+     * @param  mixed $id
+     */
+    public function generatePDF($id)
     {
-         Browsershot::url('https:://google.com')
-             ->noSandbox();
 
+        $invoice = Order::find($id);
 
-
-        $users = User::all();
-
-        $users = $users->chunk(30);
+         $template = InvoiceModel::invoice()
+            ->firstOrNew(
+                [
+                     'company_id' => 1,
+                     'type' => DocumentType::Invoice->value,
+                 ]
+            );
 
         $data = [
-            'title' => 'Welcome to ItSolutionStuff.com',
-            'users' => $users
+            'template' => $template,
+            'invoice' => $invoice
         ];
 
+         // dd($data, $data['invoice']->items()->first()->article());
         return Pdf::view('invoices.invoice', $data);
+        // return view('invoices.invoice', $data);
     }   //
 }

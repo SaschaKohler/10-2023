@@ -183,12 +183,15 @@ class InvoiceViewModel
 
     public function fontFamily(): string
     {
-        if ($this->data['font']) {
-            return Font::from($this->data['font'])->getLabel();
-        }
+        if($this->data) {
+            if ($this->data['font']) {
+                return Font::from($this->data['font'])->getLabel();
+            }
 
-        if ($this->invoice->font) {
-            return $this->invoice->font->getLabel();
+            if ($this->invoice->font) {
+                return $this->invoice->font->getLabel();
+            }
+
         }
 
         return Font::from(Font::DEFAULT)->getLabel();

@@ -11,8 +11,14 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Form;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\RestoreBulkAction;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\ForceDeleteBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -93,22 +99,25 @@ class OrderResource extends Resource
             )
             ->actions(
                 [
-
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\Action::make('Print')->button()->color('success')
-                    ->requiresConfirmation()
-                    ->modalIcon('heroicon-o-printer')
-                    ->icon('heroicon-o-printer')
-                    ->url(fn (Order $order): string => OrderResource::getUrl('print-order' , [ $order->id ])),
-                ]
+                    ActionGroup::make(
+                        [
+                            EditAction::make(),
+                            Action::make('Check')->button()->color('success')
+                                ->requiresConfirmation()
+                                ->modalIcon('heroicon-o-printer')
+                                ->icon('heroicon-o-printer')
+                                ->url(fn (Order $order): string => OrderResource::getUrl('check-order', [ $order->id ])),
+                            ]
+                    )
+                        ]
             )
             ->bulkActions(
                 [
-                Tables\Actions\BulkActionGroup::make(
+                BulkActionGroup::make(
                     [
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
+                    DeleteBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
                     ]
                 ),
                 ]
@@ -266,7 +275,7 @@ class OrderResource extends Resource
             'index' => Pages\ListOrders::route('/'),
             'create' => Pages\CreateOrder::route('/create'),
             'edit' => Pages\EditOrder::route('/{record}/edit'),
-            'print-order' => Pages\Invoice::route('/{record}/print/order'),
+            'check-order' => Pages\Invoice::route('/{record}/check'),
 
         ];
     }
