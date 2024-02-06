@@ -5,6 +5,8 @@ namespace App\Providers;
 use Filament\Notifications\Livewire\DatabaseNotifications;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
+use Spatie\LaravelPdf\Enums\Format;
+use Spatie\LaravelPdf\Facades\Pdf;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,5 +28,7 @@ class AppServiceProvider extends ServiceProvider
         //
         DatabaseNotifications::trigger('filament.notifications.database-notifications-trigger');
         // Model::unguard();
+        Pdf::default()
+            ->format(Format::A4);
     }
 }

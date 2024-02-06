@@ -27,22 +27,22 @@ class Company extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-            'user_id',
-            'name',
-            'street',
-            'zip',
-            'country',
-            'phone1',
-            'city',
-            'fax1',
-            'phone2',
-            'konto',
-            'blz',
-            'bank',
-            'uident',
-            'iban',
-            'bic',
-            'banknr',
+        'user_id',
+        'name',
+        'street',
+        'zip',
+        'country',
+        'phone1',
+        'city',
+        'fax1',
+        'phone2',
+        'konto',
+        'blz',
+        'bank',
+        'uident',
+        'iban',
+        'bic',
+        'banknr',
     ];
 
     public function defaultBill(): HasOne

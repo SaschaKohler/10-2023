@@ -10,7 +10,7 @@ use App\Models\ZipCode;
 use Filament\Panel\Concerns\HasFont;
 use Illuminate\Support\Collection;
 
-class InvoiceViewModel
+class InvoicePdfModel
 {
     use HasFont;
 
@@ -18,13 +18,11 @@ class InvoiceViewModel
 
     public Order $order;
 
-    public ?array $data = [];
 
-    public function __construct(DocumentDefault $invoice, Order $order, ?array $data = null)
+    public function __construct(DocumentDefault $invoice,Order $order)
     {
         $this->invoice = $invoice;
         $this->order = $order;
-        $this->data = $data;
     }
 
     public function logo(): ?string
@@ -34,7 +32,7 @@ class InvoiceViewModel
 
     public function show_logo(): bool
     {
-        return $this->data['show_logo'] ?? $this->invoice->show_logo ?? false;
+        return $this->invoice->show_logo;
     }
 
     // Company related methods
@@ -89,6 +87,8 @@ class InvoiceViewModel
     //     return $this->data['number_next'] ?? $this->invoice->number_next;
     // }
     //
+    //
+    //
     public  function client_name(): string
     {
         return $this->order->client->name1;
@@ -123,17 +123,19 @@ class InvoiceViewModel
     // Invoice date related methods
     public function invoice_date(): string
     {
-        return $this->order->created_at;
+        return date('d.M.Y', strtotime($this->order->created_at));
     }
 
     public function payment_terms(): string
     {
-        return $this->data['payment_terms'] ?? $this->invoice->payment_terms?->value ?? PaymentTerms::DEFAULT;
+        return $this->invoice->payment_terms?->value ?? PaymentTerms::DEFAULT;
     }
 
     public function invoice_due_date(): string
     {
         $dateFormat = $this->order->created_at;
+
+
         return PaymentTerms::from($this->payment_terms())->getDueDate($dateFormat);
     }
 
@@ -147,7 +149,7 @@ class InvoiceViewModel
         $sum_items = collect($this->order->items)->map(
             function ($item) {
                 return [
-                    'price' => $item['qty'] * $item['unit_price'] - $item['qty'] * $item['unit_price'] * $item['discount'] / 100
+                'price' => $item['qty'] * $item['unit_price'] - $item['qty'] * $item['unit_price'] * $item['discount'] / 100
                 ];
             }
         )->sum('price');
@@ -159,11 +161,12 @@ class InvoiceViewModel
     {
 
         return number_format($this->calc_sub_total(), 2, ',', '.');
+
     }
 
-    public function discount(): string
+    public function discount(): ?string
     {
-        return $this->order->discount ?? '-';
+        return $this->order->discount ?? null;
     }
 
     public function discount_price(): string
@@ -178,15 +181,11 @@ class InvoiceViewModel
 
     public function fontFamily(): string
     {
-        if ($this->data) {
-            if ($this->data['font']) {
-                return Font::from($this->data['font'])->getLabel();
-            }
 
-            if ($this->invoice->font) {
-                return $this->invoice->font->getLabel();
-            }
+        if ($this->invoice->font) {
+            return $this->invoice->font->getLabel();
         }
+
 
         return Font::from(Font::DEFAULT)->getLabel();
     }
@@ -194,7 +193,7 @@ class InvoiceViewModel
     // Invoice header related methods
     public function header(): string
     {
-        return $this->data['header'] ?? $this->invoice->header ?? 'Rechnung';
+        return $this->invoice->header ?? 'Rechnung';
     }
 
     public function subheader(): ?string
@@ -205,29 +204,28 @@ class InvoiceViewModel
     // Invoice styling
     public function accent_color(): string
     {
-        return $this->data['accent_color'] ?? $this->invoice->accent_color;
+        return $this->invoice->accent_color;
     }
 
 
     public function footer(): ?string
     {
-        return $this->data['footer'] ?? $this->invoice->footer ?? null;
+        return $this->invoice->footer ?? null;
     }
 
     public function terms(): ?string
     {
-        return $this->data['terms'] ?? $this->invoice->terms ?? null;
+        return $this->invoice->terms ?? null;
     }
 
     public function getItemColumnName(string $column, string $default): string
     {
-        $custom = $this->data[$column]['custom'] ?? $this->invoice->{$column . '_custom'} ?? null;
-
+        $custom = $this->invoice->{$column}['custom'] ?? null;
         if ($custom) {
             return $custom;
         }
 
-        $option = $this->data[$column]['option'] ?? $this->invoice->{$column . '_option'} ?? null;
+        $option = $this->invoice->{$column}['option'] ?? null;
 
         return $option ? $this->invoice->getLabelOptionFor($column, $option) : $default;
     }
@@ -267,7 +265,7 @@ class InvoiceViewModel
      */
     public function buildViewData(): array
     {
-        return [
+       return [
             'logo' => $this->logo(),
             'show_logo' => $this->show_logo(),
             'company_name' => $this->company_name(),
@@ -277,7 +275,7 @@ class InvoiceViewModel
             // 'company_state' => $this->company_state(),
             'company_zip' => $this->company_zip(),
             'company_country' => $this->company_country(),
-            // 'number_prefix' => $this->number_prefix(),
+            // 'number_prefi => $this->number_prefix(),
             // 'number_digits' => $this->number_digits(),
             // 'number_next' => $this->number_next(),
             'client_name' => $this->client_name(),
@@ -309,3 +307,4 @@ class InvoiceViewModel
         ];
     }
 }
+

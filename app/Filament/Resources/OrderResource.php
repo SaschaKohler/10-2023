@@ -35,24 +35,24 @@ class OrderResource extends Resource
         return $form
             ->schema(
                 [
-                Wizard::make(
-                    [
-                    Wizard\Step::make('Order Deatails')
-                        ->label(__('filament::resources/order-resource.wizard.order_details'))
-                        ->schema(
-                            [
-                            Section::make(OrderResource::getFormSchema())->columns(),
-                            ]
-                        ),
-                    Wizard\Step::make('Order Items')
-                        ->label(__('filament::resources/order-resource.wizard.order_items'))
-                        ->schema(
-                            [
-                            Section::make(OrderResource::getFormSchema('items')),
-                            ]
-                        ),
-                    ]
-                )
+                    Wizard::make(
+                        [
+                            Wizard\Step::make('Order Details')
+                                ->label(__('filament::resources/order-resource.wizard.order_details'))
+                                ->schema(
+                                    [
+                                        Section::make(OrderResource::getFormSchema())->columns(),
+                                    ]
+                                ),
+                            Wizard\Step::make('Order Items')
+                                ->label(__('filament::resources/order-resource.wizard.order_items'))
+                                ->schema(
+                                    [
+                                        Section::make(OrderResource::getFormSchema('items')),
+                                    ]
+                                ),
+                        ]
+                    )
                 ]
             )->columns(1);
     }
@@ -62,40 +62,39 @@ class OrderResource extends Resource
         return $table
             ->columns(
                 [
-                 TextColumn::make('number')
-                     ->label(__('filament::resources/order-resource.table.number'))
-                     ->searchable()
-                     ->sortable(),
-                TextColumn::make('client.name1')
-                    ->label(__('filament::resources/order-resource.table.client_name'))
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(),
-                TextColumn::make('status')
-                    ->label(__('filament::resources/order-resource.table.status'))
-                     ->badge()
-                    ->colors(
-                        [
-                                        'danger' => 'cancelled',
-                                        'warning' => 'processing',
-                                        'success' => fn($state) => in_array($state, ['delivered', 'shipped']),
-                                        ]
-                    ),
+                    TextColumn::make('number')
+                        ->label(__('filament::resources/order-resource.table.number'))
+                        ->searchable()
+                        ->sortable(),
+                    TextColumn::make('client.name1')
+                        ->label(__('filament::resources/order-resource.table.client_name'))
+                        ->searchable()
+                        ->sortable()
+                        ->toggleable(),
+                    TextColumn::make('status')
+                        ->label(__('filament::resources/order-resource.table.status'))
+                        ->badge()
+                        ->colors(
+                            [
+                                'danger' => 'cancelled',
+                                'warning' => 'processing',
+                                'success' => fn ($state) => in_array($state, ['delivered', 'shipped']),
+                            ]
+                        ),
 
-                TextColumn::make('total_price')
-                    ->label(__('filament::resources/order-resource.table.total_price'))
-                    ->money('eur')
-                    ->sortable(),
+                    TextColumn::make('total_price')
+                        ->label(__('filament::resources/order-resource.table.total_price'))
+                        ->money('eur')
+                        ->sortable(),
 
-                TextColumn::make('created_at')
-                    ->label(__('filament::resources/order-resource.table.order_created_at'))
-                    ->date()
-                    ->toggleable(),
+                    TextColumn::make('created_at')
+                        ->label(__('filament::resources/order-resource.table.order_created_at'))
+                        ->date()
+                        ->toggleable(),
                 ]
             )
             ->filters(
-                [
-                ]
+                []
             )
             ->actions(
                 [
@@ -106,20 +105,20 @@ class OrderResource extends Resource
                                 ->requiresConfirmation()
                                 ->modalIcon('heroicon-o-printer')
                                 ->icon('heroicon-o-printer')
-                                ->url(fn (Order $order): string => OrderResource::getUrl('check-order', [ $order->id ])),
-                            ]
-                    )
+                                ->url(fn (Order $order): string => OrderResource::getUrl('check-order', [$order->id])),
                         ]
+                    )
+                ]
             )
             ->bulkActions(
                 [
-                BulkActionGroup::make(
-                    [
-                    DeleteBulkAction::make(),
-                    ForceDeleteBulkAction::make(),
-                    RestoreBulkAction::make(),
-                    ]
-                ),
+                    BulkActionGroup::make(
+                        [
+                            DeleteBulkAction::make(),
+                            ForceDeleteBulkAction::make(),
+                            RestoreBulkAction::make(),
+                        ]
+                    ),
                 ]
             );
     }
@@ -143,88 +142,88 @@ class OrderResource extends Resource
                     ->schema(
                         [
 
-                        Select::make('article_id')
-                            ->label(__('filament::resources/order-resource.form.article'))
-                            ->required()
-                            ->reactive()
-                            ->searchable()
-                            ->preload()
-                            ->getSearchResultsUsing(fn(string $query) => Article::where('search', 'like', mb_strtoupper("%{$query}%", 'UTF-8'))->pluck('short_text', 'id'))
-                            ->getOptionLabelUsing(fn($value): ?string => Article::find($value)?->getAttribute('short_text'))
-                            ->afterStateUpdated(
-                                function ($state, callable $set, $get) {
-                                    $set('unit_price', Article::find($state)?->vk1 ?? 0);
-                                    $set('unit', Article::find($state)?->unit ?? 0);
-                                    $set('sub_total', $get('qty') * $get('unit_price'));
-                                }
-                            )
-                            ->columnSpan(
-                                [
-                                'md' => 10,
-                                ]
-                            ),
-                        TextInput::make('discount')
-                            ->label(__('filament::resources/order-resource.form.row_discount'))
-                            ->reactive()
-                            ->numeric()
-                            ->inputMode('decimal')
-                            ->suffix('%')
-                            ->columnSpan(['md' => 3])
-                            ->afterStateUpdated(
-                                function ($state, callable $set, $get) {
-                                    filled($state) ?
-                                    $set('sub_total', round($get('sub_total') - $state / 100 * $get('sub_total'), 2)) :
-                                    $set('sub_total', round($get('qty') * $get('unit_price'), 2));
-                                }
-                            ),
+                            Select::make('article_id')
+                                ->label(__('filament::resources/order-resource.form.article'))
+                                ->required()
+                                ->reactive()
+                                ->searchable()
+                                ->preload()
+                                ->getSearchResultsUsing(fn (string $query) => Article::where('search', 'like', mb_strtoupper("%{$query}%", 'UTF-8'))->pluck('short_text', 'id'))
+                                ->getOptionLabelUsing(fn ($value): ?string => Article::find($value)?->getAttribute('short_text'))
+                                ->afterStateUpdated(
+                                    function ($state, callable $set, $get) {
+                                        $set('unit_price', Article::find($state)?->vk1 ?? 0);
+                                        $set('unit', Article::find($state)?->unit ?? 0);
+                                        $set('sub_total', $get('qty') * $get('unit_price'));
+                                    }
+                                )
+                                ->columnSpan(
+                                    [
+                                        'md' => 10,
+                                    ]
+                                ),
+                            TextInput::make('discount')
+                                ->label(__('filament::resources/order-resource.form.row_discount'))
+                                ->reactive()
+                                ->numeric()
+                                ->inputMode('decimal')
+                                ->suffix('%')
+                                ->columnSpan(['md' => 3])
+                                ->afterStateUpdated(
+                                    function ($state, callable $set, $get) {
+                                        filled($state) ?
+                                            $set('sub_total', round($get('sub_total') - $state / 100 * $get('sub_total'), 2)) :
+                                            $set('sub_total', round($get('qty') * $get('unit_price'), 2));
+                                    }
+                                ),
 
-                        TextInput::make('qty')
-                            ->label(__('filament::resources/order-resource.form.qty'))
-                            ->numeric()
-                            ->reactive()
-                            ->default(1)
-                            ->afterStateUpdated(
-                                function ($state, $get, $set) {
-                                    filled($state) ? $set('sub_total', round($get('qty') * $get('unit_price'), 2)) : 0;
-                                }
-                            )
-                            ->columnSpan(
-                                [
-                                'md' => 1,
-                                ]
-                            )
-                            ->required(),
-                        TextInput::make('unit')
-                            ->label(__('filament::resources/order-resource.form.unit'))
-                            ->reactive()
-                            // ->disabled()
-                            ->columnSpan(['md' => 1]),
+                            TextInput::make('qty')
+                                ->label(__('filament::resources/order-resource.form.qty'))
+                                ->numeric()
+                                ->reactive()
+                                ->default(1)
+                                ->afterStateUpdated(
+                                    function ($state, $get, $set) {
+                                        filled($state) ? $set('sub_total', round($get('qty') * $get('unit_price'), 2)) : 0;
+                                    }
+                                )
+                                ->columnSpan(
+                                    [
+                                        'md' => 1,
+                                    ]
+                                )
+                                ->required(),
+                            TextInput::make('unit')
+                                ->label(__('filament::resources/order-resource.form.unit'))
+                                ->reactive()
+                                // ->disabled()
+                                ->columnSpan(['md' => 1]),
 
-                        TextInput::make('unit_price')
-                            ->label(__('filament::resources/order-resource.form.unit_price'))
-                            // ->disabled()
-                            ->reactive()
-                            ->numeric()
-                            ->required()
-                            ->columnSpan(
-                                [
-                                'md' => 2,
-                                ]
-                            ),
-                        TextInput::make('sub_total')
-                            ->label(__('filament::resources/order-resource.form.sub_total'))
-                            // ->disabled()
-                            ->reactive()
-                            ->numeric()
-                            ->columnSpan(['md' => 3])
+                            TextInput::make('unit_price')
+                                ->label(__('filament::resources/order-resource.form.unit_price'))
+                                // ->disabled()
+                                ->reactive()
+                                ->numeric()
+                                ->required()
+                                ->columnSpan(
+                                    [
+                                        'md' => 2,
+                                    ]
+                                ),
+                            TextInput::make('sub_total')
+                                ->label(__('filament::resources/order-resource.form.sub_total'))
+                                // ->disabled()
+                                ->reactive()
+                                ->numeric()
+                                ->columnSpan(['md' => 3])
                         ]
                     )
-                     ->orderable()
+                    ->orderable()
                     ->defaultItems(1)
                     ->disableLabel()
                     ->columns(
                         [
-                        'md' => 10,
+                            'md' => 10,
                         ]
                     )
                     ->required(),
@@ -241,10 +240,10 @@ class OrderResource extends Resource
                 ->label(__('filament::resources/order-resource.table.status'))
                 ->options(
                     [
-                    'new' => __('filament::resources/order-resource.form.status.options.new'),
-                    'processing' => __('filament::resources/order-resource.form.status.options.processing'),
-                    'delivered' => __('filament::resources/order-resource.form.status.options.delivered'),
-                    'cancelled' => __('filament::resources/order-resource.form.status.options.cancelled'),
+                        'new' => __('filament::resources/order-resource.form.status.options.new'),
+                        'processing' => __('filament::resources/order-resource.form.status.options.processing'),
+                        'delivered' => __('filament::resources/order-resource.form.status.options.delivered'),
+                        'cancelled' => __('filament::resources/order-resource.form.status.options.cancelled'),
                     ]
                 )
                 ->required(),
@@ -252,11 +251,11 @@ class OrderResource extends Resource
             Section::make()
                 ->schema(
                     [
-                    Select::make('user_id')
-                        ->label(__('filament::resources/order-resource.form.client_name'))
-                        ->relationship('client', 'name1')
-                        ->searchable()
-                        ->required(),
+                        Select::make('user_id')
+                            ->label(__('filament::resources/order-resource.form.client_name'))
+                            ->relationship('client', 'name1')
+                            ->searchable()
+                            ->required(),
                     ]
                 )
         ];
@@ -280,12 +279,13 @@ class OrderResource extends Resource
         ];
     }
 
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
             ->withoutGlobalScopes(
                 [
-                SoftDeletingScope::class,
+                    SoftDeletingScope::class,
                 ]
             );
     }

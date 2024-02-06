@@ -37,10 +37,10 @@ class Invoices extends Controller
         ];
         // dd(Storage::path($template->logo));
         $imageType = pathinfo($template->logo_url, PATHINFO_EXTENSION);
-        // dd(pathinfo($template->logo_url), base_path());
-        $imageData = file_get_contents(Storage::path('public') . '/' . $template->logo);
+        // dd(pathinfo($template->logo_url));
+        $imageData = file_get_contents('../../../storage/app/public/' . $template->logo);
         $data['base64'] = 'data:image/' . $imageType . ';base64,' . base64_encode($imageData);
-        // dd($template->logo_url, $data);
+        dd($template->logo_url, $data['base64']);
          // dd($data, $data['invoice']->items()->first()->article());
         // dd(
         $footer = '<div style="font-size: 10px; margin: 0 auto">Seite <span class="pageNumber"></span> von <span class="totalPages"></span></div>';

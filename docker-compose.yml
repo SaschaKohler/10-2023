@@ -9,7 +9,7 @@ services:
             - PGID=${DOCKER_PGID}
         restart: unless-stopped
         security_opt:
-            - seccomp:chrome.json
+            - seccomp:unconfined #chrome.json
         extra_hosts:
             - "host.docker.internal:host-gateway"
         depends_on:

@@ -144,14 +144,14 @@ class DocumentDefault extends Model
     //     return [$number_prefix, $number_digits, $number_next];
     // }
     //
-    // public static function getAttributesByType(?string $type): array
-    // {
-    //     $model = new static;
-    //     $attributes = $model->newQuery()->type($type)->first();
-    //
-    //     return $attributes ? $attributes->toArray() : [];
-    // }
-    //
+    public static function getAttributesByType(?string $type): array
+    {
+        $model = new static;
+        $attributes = $model->newQuery()->type($type)->first();
+
+        return $attributes ? $attributes->toArray() : [];
+    }
+
     // /**
     //  * Get the next number with padding for dynamic display purposes.
     //  * Even if number_next is a string, it will be cast to an integer.
@@ -167,7 +167,7 @@ class DocumentDefault extends Model
             'items' => 'Items',
             'products' => 'Products',
             'services' => 'Services',
-            'other' => 'Other',
+            'other' => 'Andere',
         ];
 
         // return array_map(translate(...), $options);
@@ -179,7 +179,7 @@ class DocumentDefault extends Model
         $options = [
             'anzahl' => 'Anzahl',
             'menge' => 'Menge',
-            'other' => 'andere',
+            'other' => 'Andere'
         ];
 
         // return array_map(translate(...), $options);
@@ -191,7 +191,7 @@ class DocumentDefault extends Model
         $options = [
             'quantity' => 'Quantity',
             'hours' => 'Hours',
-            'other' => 'Other',
+            'other' => 'Andere',
         ];
 
         // return array_map(translate(...), $options);

@@ -73,7 +73,6 @@ class Invoice extends Page
     public function fillForm(): void
     {
         $data = $this->Irecord->attributesToArray();
-        // dd($data);
         $this->form->fill($data);
     }
 
@@ -81,7 +80,6 @@ class Invoice extends Page
     {
         try {
             $data = $this->form->getState();
-            // dd($data, $this->Irecord);
             $this->handleRecordUpdate($this->Irecord, $data);
 
         } catch (Halt $exception) {
@@ -362,7 +360,7 @@ class Invoice extends Page
 
     protected function getPrintFormAction(): Action
     {
-        return Action::make('Print')
+        return Action::make('Drucken')
             ->button()
             ->color('success')
             ->requiresConfirmation()

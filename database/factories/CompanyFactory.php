@@ -23,9 +23,31 @@ class CompanyFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->unique()->company(),
-            // 'user_id' => User::factory(),
-            // 'personal_company' => true,
         ];
     }
+
+
+    private function baseState(): array
+    {
+        $city = $zip = random_int(1, 900);
+
+        return [
+            'name' => $this->faker->unique()->company(),
+            'address' => $this->faker->address(),
+            'city' => $city,
+            'zip' =>  $zip,
+            'state' => $this->faker->countryCode(),
+            'country' => $this->faker->country()
+
+        ];
+    }
+
+    /**
+     * Indicate that the model's type is invoice.
+     */
+    public function company(): self
+    {
+        return $this->state($this->baseState());
+    }
+
 }

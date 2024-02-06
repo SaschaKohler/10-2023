@@ -3,12 +3,12 @@
     $viewModel = new \App\View\Model\InvoiceViewModel($template,$invoice);
     $viewSpecial = $viewModel->buildViewData();
     extract($viewSpecial,\EXTR_SKIP);
-    info($viewSpecial);
+    // dd($viewSpecial,$viewModel);
 @endphp
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Rechnung {{ $invoice->client->name1 }} / {{ $invoice->number}}</title>
+    <title>Rechnung {{ $client_name }} / {{ $invoice_number }}</title>
 
 {!! $font_html !!}
 <style>
